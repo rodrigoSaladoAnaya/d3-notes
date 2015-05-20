@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <title>D3 scale example</title>
     <script src="http://d3js.org/d3.v3.min.js"></script>
-    <!--script src="http://code.jquery.com/jquery-2.1.4.min.js"></script-->    
     <style>
       .number {
         width: 30px;
@@ -20,8 +19,13 @@
     </style>
   </head>
   <body>
-      <div id="rnumber" class="number"></div>
-      <div id="barchar" class="barchar"></div>
+    <fieldset>
+      <legend>Linear and ordinal scale example:</legend>
+        <div id="rnumber" class="number"></div>
+        <div id="barchar" class="barchar"></div>
+        <br>
+        <a href="https://github.com/rodrigoSaladoAnaya/d3-notes/blob/master/scales/scale_example.html" target="_blank">https://github.com/rodrigoSaladoAnaya/d3-notes</a>
+    </fieldset>
 
       <script>
         var rnumber,
@@ -103,6 +107,6 @@
           .duration(wait / 2)
           .attr(transition_attr);
         }, wait);
-    </script>
+      </script>
   </body>
 <html>
