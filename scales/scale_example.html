@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>D3 scale example</title>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <!--script src="http://code.jquery.com/jquery-2.1.4.min.js"></script-->    
+    <style>
+      .number {
+        width: 30px;
+        font-style: oblique;
+      }
+      .barchar {
+        width: 300px;
+      }
+      div {
+        display: inline-block;
+        height: 40px;
+      }
+    </style>
+  </head>
+  <body>
+      <div id="rnumber" class="number"></div>
+      <div id="barchar" class="barchar"></div>
+
+      <script>
+        var rnumber,
+            lims,
+            columns,
+            svg,
+            cols_scale,
+            color_scale,
+            height_scale,
+            transition_attr,
+            wait;
+        var generate_rnumber = function() {
+          rnumber = Math.floor((Math.random() * 100) + 1);
+        }
+        var set_html_rnumber = function() {
+          document.getElementById("rnumber").innerHTML = rnumber + '%';  
+        }
+
+        lims = {
+          width: document.getElementById("barchar").offsetWidth, height: document.getElementById("barchar").offsetHeight
+        }
+        generate_rnumber();
+        set_html_rnumber();
+        columns = d3.range(0, lims.width / 4)
+        svg = d3.select("#barchar")
+          .append('svg')
+          .attr(lims);
+
+        cols_scale = d3.scale.ordinal()
+          .domain(columns)
+          .rangeRoundBands([0, lims.width], 0.5);
+
+        color_scale = d3.scale.linear()
+          .domain([0, 100])
+          .range([0, columns.length]);
+
+        height_scale = d3.scale.linear()
+          .domain([0, 100])
+          .range([5, lims.height]);
+        
+        transition_attr = {
+          x: function(d) {
+              return cols_scale(d);
+          },
+          fill: function(d) {
+            var color_out = '#CEF6CE';
+            if(color_scale(rnumber) > d) {
+              color_out = '#04B404';
+            }
+            return color_out;
+          }
+        }  
+
+        svg.selectAll('rect')
+          .data(columns)
+          .enter()
+          .append('rect')
+          .attr(transition_attr)
+          .attr({
+            y: function(d) {
+              return lims.height - height_scale(d);
+            },
+            width: cols_scale.rangeBand(),
+            height: function(d) {
+              return height_scale(d);
+            }
+          });
+          
+        wait = 2000;
+        window.setInterval(function() {
+          generate_rnumber();
+          set_html_rnumber();
+          svg.selectAll('rect')
+          .data(columns)
+          .transition()  
+          .delay(function(d, i) {
+            return i / columns.length * (50 / wait);
+          })          
+          .duration(wait / 2)
+          .attr(transition_attr);
+        }, wait);
+    </script>
+  </body>
+<html>
